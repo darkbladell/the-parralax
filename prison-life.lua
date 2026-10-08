@@ -1,6 +1,6 @@
 -- ============================================
--- THE PALARRAX v2.0 - PARTE 1/2
--- Interface Personalizada + Funções
+-- THE PALARRAX - PRISON LIFE
+-- Interface Horizontal Roxa + Funções
 -- ============================================
 
 if _G.PALARRAX_LOADED then return end
@@ -30,7 +30,7 @@ PLX.CFG = {
 local CFG = PLX.CFG
 
 -- ============================================
--- UI PERSONALIZADA
+-- UI HORIZONTAL ROXA
 -- ============================================
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "PALARRAX_UI"
@@ -39,23 +39,23 @@ ScreenGui.IgnoreGuiInset = true
 ScreenGui.DisplayOrder = 10
 ScreenGui.Parent = LP:WaitForChild("PlayerGui")
 
--- Fundo personalizado (troca o ID pelo seu)
+-- Fundo personalizado (bem apagado)
 local bgImage = Instance.new("ImageLabel")
 bgImage.Size = UDim2.new(1, 0, 1, 0)
 bgImage.BackgroundTransparency = 1
-bgImage.Image = "rbxassetid://7530797014"  -- ⚠️ Troca pelo seu ID
-bgImage.ImageTransparency = 0.85
+bgImage.Image = "rbxassetid://7530797014"
+bgImage.ImageTransparency = 0.9
 bgImage.ScaleType = Enum.ScaleType.Crop
-bgImage.ZIndex = 0
+bgImage.ZIndex = -10
 bgImage.Parent = ScreenGui
 
--- Botão flutuante (abrir/fechar)
+-- Botão flutuante roxo
 local toggleBtn = Instance.new("ImageButton")
 toggleBtn.Size = UDim2.new(0, 60, 0, 60)
 toggleBtn.Position = UDim2.new(0, 20, 0.4, 0)
-toggleBtn.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+toggleBtn.BackgroundColor3 = Color3.fromRGB(100, 50, 150)
 toggleBtn.BorderSizePixel = 0
-toggleBtn.Image = "rbxassetid://4483362458"  -- ⚠️ Troca pelo seu ID
+toggleBtn.Image = "rbxassetid://4483362458"
 toggleBtn.AutoButtonColor = false
 toggleBtn.ZIndex = 100
 toggleBtn.Parent = ScreenGui
@@ -65,16 +65,16 @@ tbc.CornerRadius = UDim.new(1, 0)
 tbc.Parent = toggleBtn
 
 local tbs = Instance.new("UIStroke")
-tbs.Color = Color3.fromRGB(255, 100, 100)
+tbs.Color = Color3.fromRGB(180, 120, 220)
 tbs.Thickness = 2
 tbs.Parent = toggleBtn
 
--- Painel principal
+-- Painel HORIZONTAL roxo
 local main = Instance.new("Frame")
-main.Size = UDim2.new(0, 270, 0, 440)
-main.Position = UDim2.new(0.5, -135, 0.5, -220)
-main.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-main.BackgroundTransparency = 0.05
+main.Size = UDim2.new(0, 420, 0, 260)        -- ← Horizontal
+main.Position = UDim2.new(0.5, -210, 0.5, -130)
+main.BackgroundColor3 = Color3.fromRGB(40, 25, 60)   -- ← Roxo escuro-claro
+main.BackgroundTransparency = 0.1
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
@@ -87,15 +87,15 @@ mc.CornerRadius = UDim.new(0, 12)
 mc.Parent = main
 
 local ms = Instance.new("UIStroke")
-ms.Color = Color3.fromRGB(255, 60, 60)
+ms.Color = Color3.fromRGB(150, 80, 200)
 ms.Thickness = 2
-ms.Transparency = 0.3
+ms.Transparency = 0.2
 ms.Parent = main
 
--- Header (arrastar)
+-- Header roxo
 local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 40)
-header.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+header.Size = UDim2.new(1, 0, 0, 36)
+header.BackgroundColor3 = Color3.fromRGB(100, 50, 150)
 header.BorderSizePixel = 0
 header.Parent = main
 
@@ -106,7 +106,7 @@ hc.Parent = header
 local headerCover = Instance.new("Frame")
 headerCover.Size = UDim2.new(1, 0, 0.5, 0)
 headerCover.Position = UDim2.new(0, 0, 0.5, 0)
-headerCover.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+headerCover.BackgroundColor3 = Color3.fromRGB(100, 50, 150)
 headerCover.BorderSizePixel = 0
 headerCover.Parent = header
 
@@ -115,7 +115,7 @@ title.Size = UDim2.new(1, -60, 1, 0)
 title.Position = UDim2.new(0, 12, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "🔥 THE PALARRAX"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextColor3 = Color3.fromRGB(240, 230, 255)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 14
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -123,10 +123,10 @@ title.Parent = header
 
 local closeBtn = Instance.new("TextButton")
 closeBtn.Size = UDim2.new(0, 26, 0, 26)
-closeBtn.Position = UDim2.new(1, -32, 0, 7)
-closeBtn.BackgroundColor3 = Color3.fromRGB(50, 25, 25)
+closeBtn.Position = UDim2.new(1, -32, 0, 5)
+closeBtn.BackgroundColor3 = Color3.fromRGB(60, 30, 90)
 closeBtn.Text = "✕"
-closeBtn.TextColor3 = Color3.fromRGB(255, 150, 150)
+closeBtn.TextColor3 = Color3.fromRGB(220, 180, 255)
 closeBtn.Font = Enum.Font.GothamBold
 closeBtn.TextSize = 14
 closeBtn.BorderSizePixel = 0
@@ -137,24 +137,26 @@ local cbc = Instance.new("UICorner")
 cbc.CornerRadius = UDim.new(0, 6)
 cbc.Parent = closeBtn
 
--- Container (scroll)
+-- Container com GRID (2 colunas pra caber horizontal)
 local container = Instance.new("ScrollingFrame")
-container.Size = UDim2.new(1, -16, 1, -52)
-container.Position = UDim2.new(0, 8, 0, 46)
+container.Size = UDim2.new(1, -16, 1, -48)
+container.Position = UDim2.new(0, 8, 0, 42)
 container.BackgroundTransparency = 1
 container.BorderSizePixel = 0
 container.ScrollBarThickness = 3
-container.ScrollBarImageColor3 = Color3.fromRGB(180, 30, 30)
+container.ScrollBarImageColor3 = Color3.fromRGB(150, 80, 200)
 container.CanvasSize = UDim2.new(0, 0, 0, 0)
 container.AutomaticCanvasSize = Enum.AutomaticSize.Y
+container.ZIndex = 60
 container.Parent = main
 
-local listLayout = Instance.new("UIListLayout")
-listLayout.Padding = UDim.new(0, 6)
-listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-listLayout.Parent = container
+local gridLayout = Instance.new("UIGridLayout")
+gridLayout.CellSize = UDim2.new(0.48, -3, 0, 32)
+gridLayout.CellPadding = UDim2.new(0.02, 0, 0, 6)
+gridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+gridLayout.Parent = container
 
--- Função de notificação
+-- Notificações roxas
 local notifGui = Instance.new("ScreenGui")
 notifGui.Name = "PALARRAX_Notif"
 notifGui.ResetOnSpawn = false
@@ -164,40 +166,41 @@ notifGui.Parent = LP:WaitForChild("PlayerGui")
 
 local function notify(text)
     local notif = Instance.new("TextLabel")
-    notif.Size = UDim2.new(0, 200, 0, 34)
-    notif.Position = UDim2.new(0.5, -100, 0, -40)
-    notif.BackgroundColor3 = Color3.fromRGB(180, 30, 30)
+    notif.Size = UDim2.new(0, 220, 0, 34)
+    notif.Position = UDim2.new(0.5, -110, 0, -40)
+    notif.BackgroundColor3 = Color3.fromRGB(100, 50, 150)
     notif.Text = text
-    notif.TextColor3 = Color3.fromRGB(255, 255, 255)
+    notif.TextColor3 = Color3.fromRGB(240, 230, 255)
     notif.Font = Enum.Font.GothamBold
     notif.TextSize = 12
     notif.BorderSizePixel = 0
     notif.Parent = notifGui
-    
+
     local nc = Instance.new("UICorner")
     nc.CornerRadius = UDim.new(0, 6)
     nc.Parent = notif
-    
-    notif:TweenPosition(UDim2.new(0.5, -100, 0, 40), "Out", "Quad", 0.3)
+
+    notif:TweenPosition(UDim2.new(0.5, -110, 0, 40), "Out", "Quad", 0.3)
     task.wait(2)
-    notif:TweenPosition(UDim2.new(0.5, -100, 0, -40), "Out", "Quad", 0.3)
+    notif:TweenPosition(UDim2.new(0.5, -110, 0, -40), "Out", "Quad", 0.3)
     task.wait(0.3)
     notif:Destroy()
 end
 
--- Botão customizado
+-- Botão customizado roxo
 local function makeBtn(text, order, color, callback)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, 0, 0, 34)
-    btn.BackgroundColor3 = color or Color3.fromRGB(30, 30, 40)
+    btn.Size = UDim2.new(1, 0, 1, 0)
+    btn.BackgroundColor3 = color or Color3.fromRGB(70, 45, 100)
     btn.BackgroundTransparency = 0.15
     btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(230, 230, 240)
+    btn.TextColor3 = Color3.fromRGB(240, 230, 255)
     btn.Font = Enum.Font.GothamMedium
-    btn.TextSize = 12
+    btn.TextSize = 11
     btn.BorderSizePixel = 0
     btn.LayoutOrder = order
     btn.AutoButtonColor = false
+    btn.ZIndex = 65
     btn.Parent = container
 
     local c = Instance.new("UICorner")
@@ -205,7 +208,7 @@ local function makeBtn(text, order, color, callback)
     c.Parent = btn
 
     local s = Instance.new("UIStroke")
-    s.Color = Color3.fromRGB(60, 60, 70)
+    s.Color = Color3.fromRGB(120, 70, 170)
     s.Thickness = 1
     s.Transparency = 0.5
     s.Parent = btn
@@ -404,17 +407,10 @@ end
 
 -- ESP
 local espFolder, espConn
-local function isRealPlayer(character)
-    for _, plr in ipairs(Players:GetPlayers()) do
-        if plr.Character == character then return true end
-    end
-    return false
-end
-local function createESP(character, isBot)
+local function createESP(character)
     if not character or not character:FindFirstChild("HumanoidRootPart") then return end
     local hrp = character.HumanoidRootPart
-    local color = isBot and Color3.fromRGB(255, 100, 0) or Color3.fromRGB(255, 50, 50)
-    local label = isBot and "BOT" or (character.Name or "Player")
+    local color = Color3.fromRGB(180, 100, 255)  -- Roxo
     local box = Instance.new("BoxHandleAdornment")
     box.Name = "PLX_ESP_Box"
     box.Adornee = hrp
@@ -433,7 +429,7 @@ local function createESP(character, isBot)
     local nameLabel = Instance.new("TextLabel")
     nameLabel.Size = UDim2.new(1, 0, 1, 0)
     nameLabel.BackgroundTransparency = 1
-    nameLabel.Text = label
+    nameLabel.Text = character.Name or "Player"
     nameLabel.TextColor3 = color
     nameLabel.TextStrokeTransparency = 0
     nameLabel.Font = Enum.Font.GothamBold
@@ -447,17 +443,14 @@ local function applyESP(on)
         espFolder = Instance.new("Folder")
         espFolder.Name = "PALARRAX_ESP"
         espFolder.Parent = Workspace
-        for _, plr in ipairs(Players:GetChildren()) do
-            if plr ~= LP and plr.Character then
-                createESP(plr.Character, false)
-            end
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr ~= LP and plr.Character then createESP(plr.Character) end
         end
         if espConn then espConn:Disconnect() end
-        espConn = Players.ChildAdded:Connect(function(obj)
-            if not CFG.ESP then return end
-            obj.CharacterAdded:Connect(function(char)
+        espConn = Players.PlayerAdded:Connect(function(plr)
+            plr.CharacterAdded:Connect(function(char)
                 task.wait(0.5)
-                if CFG.ESP and char ~= LP.Character then createESP(char, false) end
+                if CFG.ESP then createESP(char) end
             end)
         end)
     else
@@ -530,8 +523,8 @@ PLX.notify = notify
 
 print("✅ Parte 1 carregada")
 -- ============================================
--- THE PALARRAX v2.0 - PARTE 2/2
--- Botões do menu
+-- THE PALARRAX - PARTE 2/2
+-- Botões do menu (2 colunas)
 -- ============================================
 
 local PLX = _G.PLX
@@ -539,83 +532,92 @@ local CFG = PLX.CFG
 local makeBtn = PLX.makeBtn
 local notify = PLX.notify
 
--- ===== FUNÇÕES =====
-makeBtn("ESP Players", 1, Color3.fromRGB(40, 55, 45), function()
+-- Cor roxa base
+local P1 = Color3.fromRGB(75, 45, 110)
+local P2 = Color3.fromRGB(85, 50, 120)
+local P3 = Color3.fromRGB(95, 55, 130)
+local RED = Color3.fromRGB(120, 40, 60)
+
+makeBtn("ESP Players", 1, P1, function()
     CFG.ESP = not CFG.ESP
     PLX.applyESP(CFG.ESP)
     notify("ESP: " .. (CFG.ESP and "ON" or "OFF"))
 end)
 
-makeBtn("Aimbot", 2, Color3.fromRGB(60, 40, 40), function()
+makeBtn("Aimbot", 2, P2, function()
     CFG.Aimbot = not CFG.Aimbot
     if CFG.Aimbot then PLX.startAimbot() else PLX.stopAimbot() end
     notify("Aimbot: " .. (CFG.Aimbot and "ON" or "OFF"))
 end)
 
-makeBtn("Hitbox Expander", 3, Color3.fromRGB(50, 40, 60), function()
+makeBtn("Hitbox", 3, P3, function()
     CFG.HitboxEnabled = not CFG.HitboxEnabled
     if CFG.HitboxEnabled then PLX.startHitbox() else PLX.stopHitbox() end
     notify("Hitbox: " .. (CFG.HitboxEnabled and "ON" or "OFF"))
 end)
 
-makeBtn("Anti-Taze", 4, Color3.fromRGB(60, 50, 30), function()
+makeBtn("Anti-Taze", 4, P1, function()
     CFG.AntiTaze = not CFG.AntiTaze
     if CFG.AntiTaze then PLX.startAntiTaze() else PLX.stopAntiTaze() end
     notify("Anti-Taze: " .. (CFG.AntiTaze and "ON" or "OFF"))
 end)
 
-makeBtn("Speed Boost", 5, Color3.fromRGB(60, 60, 30), function()
+makeBtn("Speed Boost", 5, P2, function()
     CFG.SpeedEnabled = not CFG.SpeedEnabled
     if CFG.SpeedEnabled then PLX.startSpeed() else PLX.stopSpeed() end
     notify("Speed: " .. (CFG.SpeedEnabled and "ON" or "OFF"))
 end)
 
-makeBtn("Noclip", 6, Color3.fromRGB(60, 40, 80), function()
+makeBtn("Noclip", 6, P3, function()
     CFG.Noclip = not CFG.Noclip
     if CFG.Noclip then PLX.startNoclip() else PLX.stopNoclip() end
     notify("Noclip: " .. (CFG.Noclip and "ON" or "OFF"))
 end)
 
-makeBtn("Fly (WASD)", 7, Color3.fromRGB(40, 60, 90), function()
+makeBtn("Fly", 7, P1, function()
     CFG.Fly = not CFG.Fly
     if CFG.Fly then PLX.startFly() else PLX.stopFly() end
     notify("Fly: " .. (CFG.Fly and "ON" or "OFF"))
 end)
 
-makeBtn("FPS Booster", 8, Color3.fromRGB(40, 60, 40), function()
+makeBtn("FPS Booster", 8, P2, function()
     PLX.applyFPSBoost(not CFG.FPSBoost)
-    notify("FPS Boost: " .. (CFG.FPSBoost and "ON" or "OFF"))
+    notify("FPS: " .. (CFG.FPSBoost and "ON" or "OFF"))
 end)
 
-makeBtn("Skybox: Night", 9, Color3.fromRGB(50, 50, 80), function()
+makeBtn("Sky Night", 9, P3, function()
     PLX.setSkybox("Night")
-    notify("Skybox: Night")
+    notify("Sky: Night")
 end)
 
-makeBtn("Skybox: Purple", 10, Color3.fromRGB(80, 50, 100), function()
+makeBtn("Sky Purple", 10, P1, function()
     PLX.setSkybox("Purple")
-    notify("Skybox: Purple")
+    notify("Sky: Purple")
 end)
 
-makeBtn("Skybox: Dragon", 11, Color3.fromRGB(100, 50, 50), function()
+makeBtn("Sky Dragon", 11, P2, function()
     PLX.setSkybox("Dragon")
-    notify("Skybox: Dragon")
+    notify("Sky: Dragon")
 end)
 
-makeBtn("Resetar Tudo", 12, Color3.fromRGB(80, 25, 25), function()
+makeBtn("Resetar", 12, RED, function()
     PLX.applyESP(false); PLX.stopAimbot(); PLX.stopHitbox(); PLX.stopAntiTaze()
     PLX.stopSpeed(); PLX.stopNoclip(); PLX.stopFly(); PLX.applyFPSBoost(false)
     PLX.setSkybox("Nenhum")
     CFG.ESP = false; CFG.Aimbot = false; CFG.HitboxEnabled = false
     CFG.AntiTaze = false; CFG.SpeedEnabled = false; CFG.Noclip = false
     CFG.Fly = false; CFG.FPSBoost = false
-    notify("Tudo resetado")
+    notify("Resetado")
 end)
 
-makeBtn("Destruir Interface", 13, Color3.fromRGB(50, 20, 20), function()
-    game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):WaitForChild("PALARRAX_UI"):Destroy()
-    _G.PALARRAX_LOADED = false
+makeBtn("Fechar", 13, Color3.fromRGB(50, 35, 70), function()
+    local pg = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    local ui = pg:FindFirstChild("PALARRAX_UI")
+    if ui then
+        local m = ui:FindFirstChild("Main")
+        if m then m.Visible = false end
+    end
 end)
 
-notify("THE PALARRAX carregado!")
-print("✅ THE PALARRAX v2.0 carregado")
+notify("PALARRAX carregado")
+print("✅ THE PALARRAX carregado")
