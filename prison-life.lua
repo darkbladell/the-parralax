@@ -1,6 +1,6 @@
 -- ============================================
--- THE PALARRAX - PRISON LIFE
--- Interface Horizontal Roxa + Funções
+-- THE PALARRAX - PRISON LIFE v2.0
+-- Interface Horizontal Roxa + Todas as Funções
 -- ============================================
 
 if _G.PALARRAX_LOADED then return end
@@ -23,9 +23,12 @@ PLX.CFG = {
     Skybox = "Nenhum",
     Noclip = false, Fly = false, FlySpeed = 50,
     SpeedEnabled = false, SpeedValue = 50,
-    InfiniteStamina = false,
     AntiTaze = false,
     HitboxEnabled = false, HitboxSize = 8,
+    StrafeTurn = false,
+    KillAura = false,
+    AntiFling = false,
+    AutoPickup = false,
 }
 local CFG = PLX.CFG
 
@@ -39,7 +42,6 @@ ScreenGui.IgnoreGuiInset = true
 ScreenGui.DisplayOrder = 10
 ScreenGui.Parent = LP:WaitForChild("PlayerGui")
 
--- Fundo personalizado (bem apagado)
 local bgImage = Instance.new("ImageLabel")
 bgImage.Size = UDim2.new(1, 0, 1, 0)
 bgImage.BackgroundTransparency = 1
@@ -49,7 +51,6 @@ bgImage.ScaleType = Enum.ScaleType.Crop
 bgImage.ZIndex = -10
 bgImage.Parent = ScreenGui
 
--- Botão flutuante roxo
 local toggleBtn = Instance.new("ImageButton")
 toggleBtn.Size = UDim2.new(0, 60, 0, 60)
 toggleBtn.Position = UDim2.new(0, 20, 0.4, 0)
@@ -69,11 +70,10 @@ tbs.Color = Color3.fromRGB(180, 120, 220)
 tbs.Thickness = 2
 tbs.Parent = toggleBtn
 
--- Painel HORIZONTAL roxo
 local main = Instance.new("Frame")
-main.Size = UDim2.new(0, 420, 0, 260)        -- ← Horizontal
-main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(40, 25, 60)   -- ← Roxo escuro-claro
+main.Size = UDim2.new(0, 420, 0, 280)
+main.Position = UDim2.new(0.5, -210, 0.5, -140)
+main.BackgroundColor3 = Color3.fromRGB(40, 25, 60)
 main.BackgroundTransparency = 0.1
 main.BorderSizePixel = 0
 main.Active = true
@@ -92,7 +92,6 @@ ms.Thickness = 2
 ms.Transparency = 0.2
 ms.Parent = main
 
--- Header roxo
 local header = Instance.new("Frame")
 header.Size = UDim2.new(1, 0, 0, 36)
 header.BackgroundColor3 = Color3.fromRGB(100, 50, 150)
@@ -137,7 +136,6 @@ local cbc = Instance.new("UICorner")
 cbc.CornerRadius = UDim.new(0, 6)
 cbc.Parent = closeBtn
 
--- Container com GRID (2 colunas pra caber horizontal)
 local container = Instance.new("ScrollingFrame")
 container.Size = UDim2.new(1, -16, 1, -48)
 container.Position = UDim2.new(0, 8, 0, 42)
@@ -156,7 +154,6 @@ gridLayout.CellPadding = UDim2.new(0.02, 0, 0, 6)
 gridLayout.SortOrder = Enum.SortOrder.LayoutOrder
 gridLayout.Parent = container
 
--- Notificações roxas
 local notifGui = Instance.new("ScreenGui")
 notifGui.Name = "PALARRAX_Notif"
 notifGui.ResetOnSpawn = false
@@ -175,11 +172,9 @@ local function notify(text)
     notif.TextSize = 12
     notif.BorderSizePixel = 0
     notif.Parent = notifGui
-
     local nc = Instance.new("UICorner")
     nc.CornerRadius = UDim.new(0, 6)
     nc.Parent = notif
-
     notif:TweenPosition(UDim2.new(0.5, -110, 0, 40), "Out", "Quad", 0.3)
     task.wait(2)
     notif:TweenPosition(UDim2.new(0.5, -110, 0, -40), "Out", "Quad", 0.3)
@@ -187,7 +182,6 @@ local function notify(text)
     notif:Destroy()
 end
 
--- Botão customizado roxo
 local function makeBtn(text, order, color, callback)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(1, 0, 1, 0)
@@ -202,17 +196,14 @@ local function makeBtn(text, order, color, callback)
     btn.AutoButtonColor = false
     btn.ZIndex = 65
     btn.Parent = container
-
     local c = Instance.new("UICorner")
     c.CornerRadius = UDim.new(0, 8)
     c.Parent = btn
-
     local s = Instance.new("UIStroke")
     s.Color = Color3.fromRGB(120, 70, 170)
     s.Thickness = 1
     s.Transparency = 0.5
     s.Parent = btn
-
     btn.MouseButton1Down:Connect(function() btn.BackgroundTransparency = 0 end)
     btn.MouseButton1Up:Connect(function() btn.BackgroundTransparency = 0.15 end)
     btn.MouseLeave:Connect(function() btn.BackgroundTransparency = 0.15 end)
@@ -220,13 +211,11 @@ local function makeBtn(text, order, color, callback)
     return btn
 end
 
--- Abrir/fechar
 local menuOpen = false
 toggleBtn.MouseButton1Click:Connect(function()
     menuOpen = not menuOpen
     main.Visible = menuOpen
 end)
-
 closeBtn.MouseButton1Click:Connect(function()
     menuOpen = false
     main.Visible = false
@@ -236,7 +225,6 @@ end)
 -- FUNÇÕES
 -- ============================================
 
--- FPS BOOST
 local function applyFPSBoost(on)
     CFG.FPSBoost = on
     if on then
@@ -260,7 +248,6 @@ local function applyFPSBoost(on)
     end
 end
 
--- SKYBOX
 local SKYBOXES = {
     Nenhum = nil,
     Night = { Bk = "rbxassetid://1233158420", Dn = "rbxassetid://1233158838", Ft = "rbxassetid://1233157105", Lf = "rbxassetid://1233157640", Rt = "rbxassetid://1233157995", Up = "rbxassetid://1233159158" },
@@ -281,7 +268,6 @@ local function setSkybox(name)
     sky.Parent = Lighting
 end
 
--- NOCLIP
 local noclipConn = nil
 local function startNoclip()
     if noclipConn then return end
@@ -300,7 +286,6 @@ local function stopNoclip()
     if noclipConn then noclipConn:Disconnect() noclipConn = nil end
 end
 
--- FLY
 local flyConn = nil
 local function startFly()
     if flyConn then return end
@@ -335,7 +320,6 @@ local function stopFly()
     end
 end
 
--- SPEED
 local speedConn, speedOriginal = nil, 16
 local function startSpeed()
     if speedConn then return end
@@ -359,7 +343,6 @@ local function stopSpeed()
     if hum then hum.WalkSpeed = speedOriginal end
 end
 
--- AIMBOT
 local aimbotConn = nil
 local function startAimbot()
     if aimbotConn then return end
@@ -405,12 +388,11 @@ local function stopAimbot()
     if aimbotConn then aimbotConn:Disconnect() aimbotConn = nil end
 end
 
--- ESP
 local espFolder, espConn
 local function createESP(character)
     if not character or not character:FindFirstChild("HumanoidRootPart") then return end
     local hrp = character.HumanoidRootPart
-    local color = Color3.fromRGB(180, 100, 255)  -- Roxo
+    local color = Color3.fromRGB(180, 100, 255)
     local box = Instance.new("BoxHandleAdornment")
     box.Name = "PLX_ESP_Box"
     box.Adornee = hrp
@@ -459,7 +441,6 @@ local function applyESP(on)
     end
 end
 
--- HITBOX
 local hitboxConn = nil
 local function startHitbox()
     if hitboxConn then return end
@@ -488,7 +469,6 @@ local function stopHitbox()
     end
 end
 
--- ANTI-TAZE
 local antiTazeConn = nil
 local function startAntiTaze()
     if antiTazeConn then return end
@@ -508,6 +488,121 @@ local function stopAntiTaze()
     if antiTazeConn then antiTazeConn:Disconnect() antiTazeConn = nil end
 end
 
+-- ===== STRAFE DE VIRAR =====
+local strafeTurnConn, strafeCooldown = nil, false
+local function startStrafeTurn()
+    if strafeTurnConn then return end
+    CFG.StrafeTurn = true
+    strafeTurnConn = RunService.Heartbeat:Connect(function()
+        if not CFG.StrafeTurn then return end
+        local char = LP.Character
+        if not char then return end
+        local hum = char:FindFirstChildOfClass("Humanoid")
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        if not hum or not hrp then return end
+        local state = hum:GetState()
+        if (state == Enum.HumanoidStateType.Jumping or state == Enum.HumanoidStateType.Freefall) and not strafeCooldown then
+            if hum.MoveDirection.Magnitude > 0.1 then
+                strafeCooldown = true
+                hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(180), 0)
+                task.wait(0.4)
+                strafeCooldown = false
+            end
+        end
+    end)
+end
+local function stopStrafeTurn()
+    CFG.StrafeTurn = false
+    if strafeTurnConn then strafeTurnConn:Disconnect() strafeTurnConn = nil end
+    strafeCooldown = false
+end
+
+-- ===== KILL AURA =====
+local killAuraConn = nil
+local function startKillAura()
+    if killAuraConn then return end
+    CFG.KillAura = true
+    killAuraConn = RunService.Heartbeat:Connect(function()
+        if not CFG.KillAura then return end
+        local char = LP.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+        local myPos = char.HumanoidRootPart.Position
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr ~= LP and plr.Character then
+                local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
+                local hum = plr.Character:FindFirstChildOfClass("Humanoid")
+                if hrp and hum and hum.Health > 0 then
+                    local dist = (myPos - hrp.Position).Magnitude
+                    if dist < 6 then
+                        pcall(function()
+                            local rs = game:GetService("ReplicatedStorage")
+                            local evt = rs:FindFirstChild("meleeEvent") or rs:FindFirstChild("MeleeEvent") or rs:FindFirstChild("punchEvent")
+                            if evt then evt:FireServer(plr) end
+                        end)
+                    end
+                end
+            end
+        end
+    end)
+end
+local function stopKillAura()
+    CFG.KillAura = false
+    if killAuraConn then killAuraConn:Disconnect() killAuraConn = nil end
+end
+
+-- ===== ANTI-FLING =====
+local antiFlingConn = nil
+local function startAntiFling()
+    if antiFlingConn then return end
+    CFG.AntiFling = true
+    antiFlingConn = RunService.Stepped:Connect(function()
+        if not CFG.AntiFling then return end
+        for _, plr in ipairs(Players:GetChildren()) do
+            if plr ~= LP and plr.Character then
+                for _, part in ipairs(plr.Character:GetDescendants()) do
+                    if part:IsA("BasePart") then part.CanCollide = false end
+                end
+            end
+        end
+        local char = LP.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            local hrp = char.HumanoidRootPart
+            if hrp.AssemblyLinearVelocity.Magnitude > 100 then
+                hrp.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+            end
+        end
+    end)
+end
+local function stopAntiFling()
+    CFG.AntiFling = false
+    if antiFlingConn then antiFlingConn:Disconnect() antiFlingConn = nil end
+end
+
+-- ===== AUTO-PICKUP =====
+local autoPickupConn = nil
+local function startAutoPickup()
+    if autoPickupConn then return end
+    CFG.AutoPickup = true
+    autoPickupConn = RunService.Heartbeat:Connect(function()
+        if not CFG.AutoPickup then return end
+        local char = LP.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+        local myPos = char.HumanoidRootPart.Position
+        for _, obj in ipairs(Workspace:GetDescendants()) do
+            if obj:IsA("Tool") and obj:FindFirstChild("Handle") then
+                local dist = (myPos - obj.Handle.Position).Magnitude
+                if dist < 8 then
+                    pcall(function() obj.Parent = LP.Backpack end)
+                end
+            end
+        end
+    end)
+end
+local function stopAutoPickup()
+    CFG.AutoPickup = false
+    if autoPickupConn then autoPickupConn:Disconnect() autoPickupConn = nil end
+end
+
 -- Guarda global
 PLX.applyFPSBoost = applyFPSBoost
 PLX.setSkybox = setSkybox
@@ -518,13 +613,17 @@ PLX.startAimbot = startAimbot; PLX.stopAimbot = stopAimbot
 PLX.applyESP = applyESP
 PLX.startHitbox = startHitbox; PLX.stopHitbox = stopHitbox
 PLX.startAntiTaze = startAntiTaze; PLX.stopAntiTaze = stopAntiTaze
+PLX.startStrafeTurn = startStrafeTurn; PLX.stopStrafeTurn = stopStrafeTurn
+PLX.startKillAura = startKillAura; PLX.stopKillAura = stopKillAura
+PLX.startAntiFling = startAntiFling; PLX.stopAntiFling = stopAntiFling
+PLX.startAutoPickup = startAutoPickup; PLX.stopAutoPickup = stopAutoPickup
 PLX.makeBtn = makeBtn
 PLX.notify = notify
 
 print("✅ Parte 1 carregada")
 -- ============================================
 -- THE PALARRAX - PARTE 2/2
--- Botões do menu (2 colunas)
+-- Botões do menu
 -- ============================================
 
 local PLX = _G.PLX
@@ -532,7 +631,6 @@ local CFG = PLX.CFG
 local makeBtn = PLX.makeBtn
 local notify = PLX.notify
 
--- Cor roxa base
 local P1 = Color3.fromRGB(75, 45, 110)
 local P2 = Color3.fromRGB(85, 50, 120)
 local P3 = Color3.fromRGB(95, 55, 130)
@@ -556,63 +654,88 @@ makeBtn("Hitbox", 3, P3, function()
     notify("Hitbox: " .. (CFG.HitboxEnabled and "ON" or "OFF"))
 end)
 
-makeBtn("Anti-Taze", 4, P1, function()
+makeBtn("Kill Aura", 4, Color3.fromRGB(120, 50, 130), function()
+    CFG.KillAura = not CFG.KillAura
+    if CFG.KillAura then PLX.startKillAura() else PLX.stopKillAura() end
+    notify("Kill Aura: " .. (CFG.KillAura and "ON" or "OFF"))
+end)
+
+makeBtn("Anti-Fling", 5, Color3.fromRGB(100, 60, 140), function()
+    CFG.AntiFling = not CFG.AntiFling
+    if CFG.AntiFling then PLX.startAntiFling() else PLX.stopAntiFling() end
+    notify("Anti-Fling: " .. (CFG.AntiFling and "ON" or "OFF"))
+end)
+
+makeBtn("Auto-Pickup", 6, Color3.fromRGB(80, 50, 120), function()
+    CFG.AutoPickup = not CFG.AutoPickup
+    if CFG.AutoPickup then PLX.startAutoPickup() else PLX.stopAutoPickup() end
+    notify("Auto-Pickup: " .. (CFG.AutoPickup and "ON" or "OFF"))
+end)
+
+makeBtn("Anti-Taze", 7, P1, function()
     CFG.AntiTaze = not CFG.AntiTaze
     if CFG.AntiTaze then PLX.startAntiTaze() else PLX.stopAntiTaze() end
     notify("Anti-Taze: " .. (CFG.AntiTaze and "ON" or "OFF"))
 end)
 
-makeBtn("Speed Boost", 5, P2, function()
+makeBtn("Strafe Virar", 8, P2, function()
+    CFG.StrafeTurn = not CFG.StrafeTurn
+    if CFG.StrafeTurn then PLX.startStrafeTurn() else PLX.stopStrafeTurn() end
+    notify("Strafe: " .. (CFG.StrafeTurn and "ON" or "OFF"))
+end)
+
+makeBtn("Speed Boost", 9, P3, function()
     CFG.SpeedEnabled = not CFG.SpeedEnabled
     if CFG.SpeedEnabled then PLX.startSpeed() else PLX.stopSpeed() end
     notify("Speed: " .. (CFG.SpeedEnabled and "ON" or "OFF"))
 end)
 
-makeBtn("Noclip", 6, P3, function()
+makeBtn("Noclip", 10, P1, function()
     CFG.Noclip = not CFG.Noclip
     if CFG.Noclip then PLX.startNoclip() else PLX.stopNoclip() end
     notify("Noclip: " .. (CFG.Noclip and "ON" or "OFF"))
 end)
 
-makeBtn("Fly", 7, P1, function()
+makeBtn("Fly", 11, P2, function()
     CFG.Fly = not CFG.Fly
     if CFG.Fly then PLX.startFly() else PLX.stopFly() end
     notify("Fly: " .. (CFG.Fly and "ON" or "OFF"))
 end)
 
-makeBtn("FPS Booster", 8, P2, function()
+makeBtn("FPS Booster", 12, P3, function()
     PLX.applyFPSBoost(not CFG.FPSBoost)
     notify("FPS: " .. (CFG.FPSBoost and "ON" or "OFF"))
 end)
 
-makeBtn("Sky Night", 9, P3, function()
+makeBtn("Sky Night", 13, P1, function()
     PLX.setSkybox("Night")
     notify("Sky: Night")
 end)
 
-makeBtn("Sky Purple", 10, P1, function()
+makeBtn("Sky Purple", 14, P2, function()
     PLX.setSkybox("Purple")
     notify("Sky: Purple")
 end)
 
-makeBtn("Sky Dragon", 11, P2, function()
+makeBtn("Sky Dragon", 15, P3, function()
     PLX.setSkybox("Dragon")
     notify("Sky: Dragon")
 end)
 
-makeBtn("Resetar", 12, RED, function()
+makeBtn("Resetar", 16, RED, function()
     PLX.applyESP(false); PLX.stopAimbot(); PLX.stopHitbox(); PLX.stopAntiTaze()
     PLX.stopSpeed(); PLX.stopNoclip(); PLX.stopFly(); PLX.applyFPSBoost(false)
-    PLX.setSkybox("Nenhum")
+    PLX.setSkybox("Nenhum"); PLX.stopStrafeTurn(); PLX.stopKillAura()
+    PLX.stopAntiFling(); PLX.stopAutoPickup()
     CFG.ESP = false; CFG.Aimbot = false; CFG.HitboxEnabled = false
     CFG.AntiTaze = false; CFG.SpeedEnabled = false; CFG.Noclip = false
-    CFG.Fly = false; CFG.FPSBoost = false
+    CFG.Fly = false; CFG.FPSBoost = false; CFG.StrafeTurn = false
+    CFG.KillAura = false; CFG.AntiFling = false; CFG.AutoPickup = false
     notify("Resetado")
 end)
 
-makeBtn("Fechar", 13, Color3.fromRGB(50, 35, 70), function()
-    local pg = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-    local ui = pg:FindFirstChild("PALARRAX_UI")
+makeBtn("Fechar", 17, Color3.fromRGB(50, 35, 70), function()
+    local ui = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("PALARRAX_UI")
     if ui then
         local m = ui:FindFirstChild("Main")
         if m then m.Visible = false end
